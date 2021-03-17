@@ -178,7 +178,10 @@ public class BigInt {
             }
         }
         len = sb.length()-1;
-        while (sb.charAt(len)==',' || sb.charAt(len)=='0'){
+        if (sb.length()==1 &&sb.charAt(0)=='0'){
+            return sb.toString();
+        }
+        while (len >= 0 && (sb.charAt(len)==',' || sb.charAt(len)=='0')){
             sb.deleteCharAt(len);
             len--;
         }
