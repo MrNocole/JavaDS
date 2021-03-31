@@ -1,5 +1,3 @@
-package src;
-
 public class TreeNode implements Comparable<TreeNode>{
     int val;
     char c;
