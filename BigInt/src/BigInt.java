@@ -12,9 +12,6 @@ public class BigInt {
         flag == false means negative
      */
     boolean flag ;
-    /*
-
-     */
     List<Byte> num;
     BigInt(Integer input){
         this(input.toString());
