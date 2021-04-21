@@ -1,9 +1,11 @@
+
 import com.sun.source.tree.Tree;
 
-import javax.swing.*;
+import java.io.*;
 import java.util.*;
 
-public class HuffmanTree {
+public class HuffmanTree implements Serializable,SerDes<HuffmanTree> {
+    private static final long serialVersionUID = 114514;
     List<Map.Entry<Character,Integer>> info ;
     TreeNode head;
     PriorityQueue<TreeNode> priorityQueue;
@@ -24,7 +26,6 @@ public class HuffmanTree {
             priorityQueue.offer(treeNode);
         }
     }
-
     public void DoHuffman(){
         while (priorityQueue.size()>1){
             TreeNode l = priorityQueue.poll();
@@ -34,7 +35,6 @@ public class HuffmanTree {
         }
         head = priorityQueue.poll();
     }
-
     public void dfs(TreeNode node, StringBuffer crt){
         if (node.left==null && node.right==null) {
             TreeCode.put(node.c,crt.toString());
@@ -44,7 +44,6 @@ public class HuffmanTree {
         dfs(node.left,new StringBuffer(crt+"0"));
         dfs(node.right,new StringBuffer(crt+"1"));
     }
-
     public String GetCodeByChar (char c){
         return TreeCode.getOrDefault(c, null);
     }
@@ -82,21 +81,78 @@ public class HuffmanTree {
         }
         return stringbuffer.toString();
     }
-    public static void main(String[] args) {
+    public ArrayList<String> out(){
+        Iterator iter = TreeCode.entrySet().iterator();
+        ArrayList<String> ret = new ArrayList<>();
+        while (iter.hasNext()){
+            Map.Entry<Character,String> entry = (Map.Entry)iter.next();
+            ret.add(entry.getValue());
+        }
+        return ret;
+    }
+
+    @Override
+    public byte[] serBin(HuffmanTree huffmanTree)  {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try{
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(huffmanTree);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return baos.toByteArray();
+    }
+
+    @Override
+    public String serTxt(HuffmanTree huffmanTree) throws IOException {
+        byte[] list = serBin(huffmanTree);
+        return Base64.getDecoder().decode(list).toString();
+    }
+
+    @Override
+    public HuffmanTree des(byte[] bin) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bai = new ByteArrayInputStream(bin);
+        ObjectInputStream ois = new ObjectInputStream(bai);
+        return (HuffmanTree) ois.readObject();
+    }
+
+    @Override
+    public HuffmanTree des(String text) throws IOException, ClassNotFoundException {
+        byte[] list = Base64.getDecoder().decode(text);
+        return des(list);
+    }
+
+    @Override
+    public boolean serToFile(HuffmanTree huffmanTree, String path, String file){
+        try {
+            byte[] list = serBin(huffmanTree);
+            System.out.println(Arrays.toString(list));
+            FileOutputStream fos = new FileOutputStream(path + file);
+            fos.write(list);
+            return true;
+        }catch (IOException e){
+            return false;
+        }
+    }
+
+    @Override
+    public HuffmanTree desFromFile(String path, String file) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(path+file);
+        byte[] list = fis.readAllBytes();
+        return des(list);
+    }
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
         String s = scanner.next();
         StringDealer stringDealer = new StringDealer(s);
         HuffmanTree huffmanTree = new HuffmanTree(stringDealer.Deal());
         huffmanTree.DoHuffman();
         huffmanTree.dfs(huffmanTree.head,new StringBuffer());
-        System.out.println("Coding Success!\nLet's coding a String:");
-        String string = scanner.next();
-        ArrayList<String> to = huffmanTree.codingString(string);
-        for (String s1 : to){
-            System.out.print(s1+" ");
-        }
-        System.out.println("\nLet's decoding a String:");
-        string = scanner.next();
-        System.out.println(huffmanTree.decoding(string));
+        System.out.println(Arrays.toString(huffmanTree.out().toArray()));
+        System.out.println(Arrays.toString(huffmanTree.serBin(huffmanTree)));
+//        System.out.println(huffmanTree.serToFile(huffmanTree,"C:\\Users\\19262\\IdeaProjects\\JavaDS\\Sers\\","huf.ser"));
+//        HuffmanTree huffmanTree1 = huffmanTree.desFromFile("C:\\Users\\19262\\IdeaProjects\\JavaDS\\Sers\\","huf.ser");
+//        System.out.println(huffmanTree1.out().toArray());
     }
 }

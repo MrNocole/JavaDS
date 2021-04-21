@@ -1,4 +1,6 @@
-public class TreeNode implements Comparable<TreeNode>{
+import java.io.Serializable;
+
+public class TreeNode implements Comparable<TreeNode>, Serializable {
     int val;
     char c;
     TreeNode left ,  right;
