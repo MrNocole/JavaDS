@@ -6,11 +6,11 @@ import java.util.*;
 
 public class HuffmanTree implements Serializable,SerDes<HuffmanTree> {
     private static final long serialVersionUID = 114514;
-    List<Map.Entry<Character,Integer>> info ;
     TreeNode head;
     PriorityQueue<TreeNode> priorityQueue;
     Map<Character,String> TreeCode;
     HuffmanTree(Map<Character,Integer> map){
+        List<Map.Entry<Character,Integer>> info ;
         head = new TreeNode();
         info = new ArrayList<>(map.entrySet());
         TreeCode = new HashMap<>();
@@ -144,15 +144,19 @@ public class HuffmanTree implements Serializable,SerDes<HuffmanTree> {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         Scanner scanner = new Scanner(System.in);
-        String s = scanner.next();
-        StringDealer stringDealer = new StringDealer(s);
-        HuffmanTree huffmanTree = new HuffmanTree(stringDealer.Deal());
-        huffmanTree.DoHuffman();
-        huffmanTree.dfs(huffmanTree.head,new StringBuffer());
-        System.out.println(Arrays.toString(huffmanTree.out().toArray()));
-        System.out.println(Arrays.toString(huffmanTree.serBin(huffmanTree)));
+//
+//        String s = scanner.next();
+//        StringDealer stringDealer = new StringDealer(s);
+//        HuffmanTree huffmanTree = new HuffmanTree(stringDealer.Deal());
+//        huffmanTree.DoHuffman();
+//        huffmanTree.dfs(huffmanTree.head,new StringBuffer());
+//        System.out.println(Arrays.toString(huffmanTree.out().toArray()));
+//        huffmanTree.serBin(huffmanTree);
 //        System.out.println(huffmanTree.serToFile(huffmanTree,"C:\\Users\\19262\\IdeaProjects\\JavaDS\\Sers\\","huf.ser"));
-//        HuffmanTree huffmanTree1 = huffmanTree.desFromFile("C:\\Users\\19262\\IdeaProjects\\JavaDS\\Sers\\","huf.ser");
-//        System.out.println(huffmanTree1.out().toArray());
+//
+        HuffmanTree huffmanTree2 = new HuffmanTree(new HashMap<>());
+
+        HuffmanTree huffmanTree1 = huffmanTree2.desFromFile("C:\\Users\\19262\\IdeaProjects\\JavaDS\\Sers\\","huf.ser");
+        System.out.println(Arrays.toString(huffmanTree1.out().toArray()));
     }
 }

@@ -4,6 +4,7 @@ import java.util.*;
 public class Person implements Serializable {
     private static final long serialVersionUID = 114514;
     List<Map.Entry<Character,String>> list;
+    HashMap<Character,String> map;
     private String name;
     private int age;
     PriorityQueue<TreeNode> priorityQueue;
